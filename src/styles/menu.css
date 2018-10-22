@@ -1,0 +1,11 @@
+
+.dashboardBtn:hover {
+    -fx-background-color: #0d2880;
+    -fx-text-fill: #ffffff;
+}
+
+.pupilImage {
+/*    -fx-border-radius: 50;
+     -fx-background-radius: 50;
+     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 80, 0, 0, 0);*/
+}

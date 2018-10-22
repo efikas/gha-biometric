@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.GhaController">
+   <right>
+      <JFXHamburger fx:id="hamburger" alignment="TOP_RIGHT" prefHeight="30.0" prefWidth="50.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets right="10.0" top="10.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </JFXHamburger>
+   </right>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="72.0" prefWidth="950.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="963.0" text="GREAT HEIGHTS ACADEMY">
+                     <font>
+                        <Font name="System Bold" size="43.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <ScrollPane prefHeight="556.0" prefWidth="903.0">
+               <content>
+                  <AnchorPane fx:id="containerPane" prefHeight="562.0" prefWidth="874.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+   </center>
+   <left>
+      <JFXDrawer fx:id="menuDrawer" alignment="TOP_LEFT" minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="47.0" BorderPane.alignment="CENTER" />
+   </left>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>
