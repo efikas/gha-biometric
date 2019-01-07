@@ -15,7 +15,7 @@ public class MysqlConnect {
 //    private static final String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
     private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/gha_record";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "jboy01";
+    private static final String PASSWORD = "";
     private static final String MAX_POOL = "250";
     private static final String USE_SSL = "false";
      private static final String TIME_ZONE = "Europe/Moscow";
