@@ -244,6 +244,7 @@ public class AddStudentController implements Initializable{
             this.pupilClassArm.getItems().add(value);
         });
         
+        this.pupilFullname.getItems().add("");
     }
     
     private void resetNameCombo(){

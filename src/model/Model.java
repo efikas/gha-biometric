@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.MysqlConnect;
+import partial.Pupil;
 
 /**
  *
@@ -75,15 +76,15 @@ public class Model {
             File file = (File) record.get("image");
             FileInputStream fin = new FileInputStream(file);
             // PreparedStatements can use variables and are more efficient
-            preparedStatement = connect.prepareStatement("insert into gha_record.parent values (default, ?, ?, ?, ? , ?, ?)");
+            preparedStatement = connect.prepareStatement("insert into gha_record.parent values (default, ?, ?, ?, ? , ?, ?)", Statement.RETURN_GENERATED_KEYS);
              
             // Parameters start with 1
             preparedStatement.setString(1, (String) record.get("fullname"));
             preparedStatement.setString(2, (String) record.get("mobile"));
             preparedStatement.setString(3, (String) record.get("phone"));
             preparedStatement.setBinaryStream(4, (InputStream)fin,(int)file.length());
-//            preparedStatement.setInt(4, (Integer) record.get("class"));
-//            preparedStatement.setInt(5, (Integer) record.get("arm"));
+            preparedStatement.setBytes(5, (byte[]) record.get("rightThumb"));
+            preparedStatement.setBytes(6, (byte[]) record.get("leftThumb"));
             preparedStatement.executeUpdate();
             
             ResultSet rs = preparedStatement.getGeneratedKeys();
@@ -93,15 +94,18 @@ public class Model {
             }
             
             if(parentId != 0){
-                Map<String, Integer> data  = (Map<String, Integer>)record.get("pupils");
+                List<Pupil> pupils  = (List<Pupil>)record.get("pupils");
 
                 // Iterating over values only
-                for (Integer value : data.values()) {
-                    preparedStatement = connect.prepareStatement("insert into gha_record.parent_pupil values (default, ?, ?)");
+                for (int i = 0; i < pupils.size(); i++) {
+                    
+                    if(pupils.get(i) != null){
+                        preparedStatement = connect.prepareStatement("insert into gha_record.parent_pupil values (default, ?, ?)");
 
-                    preparedStatement.setInt(1, parentId);
-                    preparedStatement.setInt(2, value);
-                    preparedStatement.executeUpdate();
+                        preparedStatement.setInt(1, parentId);
+                        preparedStatement.setInt(2, pupils.get(i).getId());
+                        preparedStatement.executeUpdate();
+                    }
                 }
             }
             

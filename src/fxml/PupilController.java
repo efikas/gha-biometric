@@ -85,7 +85,7 @@ public class PupilController implements Initializable{
             Map<String, Object> data = new HashMap<String, Object>();
             
             if (this.pupilClass.getSelectionModel().getSelectedIndex() > 0 &&
-                    this.pupilClassArm.getSelectionModel().getSelectedIndex() > 0){
+                this.pupilClassArm.getSelectionModel().getSelectedIndex() > 0){
                 data.put("firstName", this.pupilFirstName.getText());
                 data.put("middleName", this.pupilMiddleName.getText());
                 data.put("lastName", this.pupilLastName.getText());
@@ -106,7 +106,7 @@ public class PupilController implements Initializable{
             else{
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Form Error");
-                alert.setContentText("Make Sure You fill the form correctly!");
+                alert.setHeaderText("Make Sure You fill the form correctly!");
                 Optional<ButtonType> result = alert.showAndWait();
             }
             

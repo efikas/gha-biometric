@@ -68,7 +68,7 @@ public class ParentController extends JFrame implements Initializable{
     private File file = null;
     partial.Partial partial = new Partial();
     private FileInputStream fis;
-    private FileOutputStream leftThumbStream, rightThumbStream = null;
+    private byte[] leftThumbStream, rightThumbStream = null;
     
     //toggle to know the thumb selected
     // 0 - none, 1 - Left, 2 - Right
@@ -102,8 +102,8 @@ public class ParentController extends JFrame implements Initializable{
     @FXML
     private Button submitBtn;
     @FXML
-    private Button cancelBtn;
-    @FXML
+//    private Button cancelBtn;
+//    @FXML
     private ImageView pupil2Image;
     @FXML
     private ImageView pupil1Image;
@@ -133,12 +133,17 @@ public class ParentController extends JFrame implements Initializable{
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // populate title
+        partial.title().forEach(value->{
+            this.title.getItems().add(value);
+        });
+        
         // populate the pareantward list with dummy data
         // Pupil pupil = new Pupil(0, "", new Image("/assets/images/user.jpg",160,180,false,true));
         Pupil pupil = new Pupil(0, "", null);
         int i = 0;
-        while(i < 5){
-            this.parendWard.add(pupil);
+        while(i < 6){
+            this.parendWard.add(null);
             i++;
         }
     
@@ -178,10 +183,11 @@ public class ParentController extends JFrame implements Initializable{
                  data.put("image", this.file);
                  data.put("rightThumb", this.rightThumbStream);
                  data.put("leftThumb", this.leftThumbStream);
-                 data.put("pupils", this.selectedPupils);
+                 data.put("pupils", this.parendWard);
+//               System.out.println(this.parendWard.get(0).getName());
 
                  try {
-                     model.addPupilRecord(data);
+                     model.addParentRecord(data);
                  } catch (FileNotFoundException ex) {
                      Logger.getLogger(PupilController.class.getName()).log(Level.SEVERE, null, ex);
                  }
@@ -189,14 +195,14 @@ public class ParentController extends JFrame implements Initializable{
            else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Validation");
-                alert.setContentText("Fill the form correclty");
+                alert.setHeaderText("Fill the form correclty");
                 Optional<ButtonType> result = alert.showAndWait();
            }
        });
        
-       cancelBtn.setOnAction(e->{
-       
-       });
+//       cancelBtn.setOnAction(e->{
+//       
+//       });
     }
     
     /**
@@ -220,13 +226,14 @@ public class ParentController extends JFrame implements Initializable{
             stage.setScene(scene);
             stage.showAndWait();
             
-           // System.out.print(tvObservableList.get(0).getName());
-            this.parendWard.set(index, tvObservableList.get(0));
-            nameLabel.setText(tvObservableList.get(0).getName());
-            Blob img = (Blob)tvObservableList.get(0).getImage();
-            setPupilImage(img, imgView, imageName);
+//            System.out.print(tvObservableList);
+            if(tvObservableList.size() > 0) {
+                this.parendWard.set(index, tvObservableList.get(0));
+                nameLabel.setText(tvObservableList.get(0).getName());
+                Blob img = (Blob)tvObservableList.get(0).getImage();
+                setPupilImage(img, imgView, imageName);
+            }
             
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -364,17 +371,19 @@ public class ParentController extends JFrame implements Initializable{
             //convert the template to stream 
             try {
                 if(thumbToggle == 1 && template != null){
-                    leftThumbStream = new FileOutputStream(file);
-                    leftThumbStream.write(template.serialize());
-                    leftThumbStream.close();
+                    leftThumbStream = template.serialize();
+//                            new FileOutputStream(file);
+//                    leftThumbStream.write(template.serialize());
+//                    leftThumbStream.close();
                     
                     //confirm left thumb scan status
                 }
                 
                 if(thumbToggle == 2 && template != null){
-                    rightThumbStream = new FileOutputStream(file);
-                    rightThumbStream.write(template.serialize());
-                    rightThumbStream.close();
+                    rightThumbStream = template.serialize();
+//                            new FileOutputStream(file);
+//                    rightThumbStream.write(template.serialize());
+//                    rightThumbStream.close();
                     
                     //confirm right thumb scan status
                 }

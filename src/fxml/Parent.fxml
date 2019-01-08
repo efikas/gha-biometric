@@ -70,8 +70,8 @@
                         <Image url="@../assets/images/user.jpg" />
                      </image>
                   </ImageView>
-                  <Button fx:id="submitBtn" layoutX="589.0" layoutY="976.0" mnemonicParsing="false" text="Submit" />
-                  <Button fx:id="cancelBtn" layoutX="92.0" layoutY="976.0" mnemonicParsing="false" text="Cancel" />
+                  <Button fx:id="submitBtn" layoutX="389.0" layoutY="976.0" mnemonicParsing="false" text="Submit" />
+                  <!--<Button fx:id="cancelBtn" layoutX="92.0" layoutY="976.0" mnemonicParsing="false" text="Cancel" />-->
                   <JFXComboBox fx:id="title" labelFloat="true" layoutX="103.0" layoutY="23.0" prefHeight="26.0" prefWidth="383.0" promptText="Title" />
                   <AnchorPane layoutX="103.0" layoutY="248.0" prefHeight="227.0" prefWidth="453.0" style="-fx-border-width: 2; -fx-border-color: #4059a9; -fx-border-radius: 10;">
                      <children>

@@ -34,6 +34,19 @@ public class Partial {
         return options;
     }
     
+    public ObservableList<String> title(){
+        ObservableList<String> options = 
+        FXCollections.observableArrayList(
+             "",
+            "Mr",
+            "Mrs",
+            "Sir",
+            "Mallam"
+        );
+        
+        return options;
+    }
+    
     public ObservableList<String> populateClassArm(){
         ObservableList<String> options = 
         FXCollections.observableArrayList(
