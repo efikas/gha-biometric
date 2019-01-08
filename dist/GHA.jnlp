@@ -8,7 +8,11 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="GHA.jar" size="129456" download="eager" />
+    <jar href="GHA.jar" size="146623" download="eager" />
+    <jar href="lib\dpfpenrollment.jar" size="323314" download="eager" />
+    <jar href="lib\dpfpverification.jar" size="33662" download="eager" />
+    <jar href="lib\dpotapi.jar" size="58858" download="eager" />
+    <jar href="lib\dpotjni.jar" size="11465" download="eager" />
     <jar href="lib\jfoenix-8.0.7.jar" size="2631271" download="eager" />
     <jar href="lib\jfoenix.jar" size="2631271" download="eager" />
     <jar href="lib\mysql-connector-java-8.0.12.jar" size="2020431" download="eager" />

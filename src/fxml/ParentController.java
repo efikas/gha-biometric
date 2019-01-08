@@ -5,8 +5,14 @@
  */
 package fxml;
 
+import com.digitalpersona.onetouch.DPFPTemplate;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import enrollment.EnrollmentForm;
+//import static enrollment.MainForm.TEMPLATE_PROPERTY;
+import enrollment.VerificationForm;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -45,6 +51,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.swing.*;
 import model.Model;
 import partial.Partial;
 import partial.Pupil;
@@ -53,14 +60,23 @@ import partial.Pupil;
  *
  * @author latyf
  */
-public class ParentController implements Initializable{
+public class ParentController extends JFrame implements Initializable{
 
     FileChooser.ExtensionFilter imageFilter;
     private FileChooser fileChooser;
     private Image image;
-    private File file;
+    private File file = null;
     partial.Partial partial = new Partial();
     private FileInputStream fis;
+    private FileOutputStream leftThumbStream, rightThumbStream = null;
+    
+    //toggle to know the thumb selected
+    // 0 - none, 1 - Left, 2 - Right
+    int thumbToggle = 0;
+    
+    //enrollment
+    public static String TEMPLATE_PROPERTY = "template";
+    private DPFPTemplate template;
     
     Map<String, Integer> selectedPupils = new HashMap<String, Integer>();
     model.Model model = new Model();
@@ -114,7 +130,7 @@ public class ParentController implements Initializable{
     private Label pupil5NameLabel;
     @FXML
     private Label pupil6NameLabel;
-
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // populate the pareantward list with dummy data
@@ -127,11 +143,17 @@ public class ParentController implements Initializable{
         }
     
        rightThumbImage.setOnMouseClicked(e -> {
-           
+           if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
+               thumbToggle = 2;
+               onEnroll("Right ");
+            }
        });
        
        leftThumbImage.setOnMouseClicked(e -> {
-           
+           if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
+               thumbToggle = 1;
+               onEnroll("Left ");
+            }
        });
        
        parentImage.setOnMouseClicked(e -> {
@@ -142,23 +164,34 @@ public class ParentController implements Initializable{
        
        // handle the selection of pupils
        selectPupil();
+       setTemplate(null);
        
        submitBtn.setOnAction(e->{
-           Map<String, Object> data = new HashMap<String, Object>();
-           String parentName = this.title.getValue() + " " + this.fullname.getText();
-            data.put("fullname", parentName);
-            data.put("phone", this.phone.getText());
-            data.put("mobile", this.mobile.getText());
-            data.put("image", this.file);
-//            data.put("rightThumb", this.file);
-//            data.put("leftThumb", this.file);
-            data.put("pupils", this.selectedPupils);
-            
-            try {
-                model.addPupilRecord(data);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(PupilController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+           
+           //validate
+           if(validateSubmission()){
+                Map<String, Object> data = new HashMap<String, Object>();
+                String parentName = this.title.getValue() + " " + this.fullname.getText();
+                 data.put("fullname", parentName);
+                 data.put("phone", this.phone.getText());
+                 data.put("mobile", this.mobile.getText());
+                 data.put("image", this.file);
+                 data.put("rightThumb", this.rightThumbStream);
+                 data.put("leftThumb", this.leftThumbStream);
+                 data.put("pupils", this.selectedPupils);
+
+                 try {
+                     model.addPupilRecord(data);
+                 } catch (FileNotFoundException ex) {
+                     Logger.getLogger(PupilController.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+           }
+           else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Validation");
+                alert.setContentText("Fill the form correclty");
+                Optional<ButtonType> result = alert.showAndWait();
+           }
        });
        
        cancelBtn.setOnAction(e->{
@@ -309,5 +342,83 @@ public class ParentController implements Initializable{
             }
        });
     }
+    
+    private void onEnroll(String thumb) {
+        EnrollmentForm form = new EnrollmentForm(this, thumb);
+        form.setVisible(true);
+    }
+
+    private void onVerify() {
+        VerificationForm form = new VerificationForm(this);
+        form.setVisible(true);
+    }
+
+     public DPFPTemplate getTemplate() {
+            return template;
+    }
+    public void setTemplate(DPFPTemplate template) {
+            DPFPTemplate old = this.template;
+            this.template = template;
+            firePropertyChange(TEMPLATE_PROPERTY, old, template);
+            
+            //convert the template to stream 
+            try {
+                if(thumbToggle == 1 && template != null){
+                    leftThumbStream = new FileOutputStream(file);
+                    leftThumbStream.write(template.serialize());
+                    leftThumbStream.close();
+                    
+                    //confirm left thumb scan status
+                }
+                
+                if(thumbToggle == 2 && template != null){
+                    rightThumbStream = new FileOutputStream(file);
+                    rightThumbStream.write(template.serialize());
+                    rightThumbStream.close();
+                    
+                    //confirm right thumb scan status
+                }
+            } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Fingerprint serialization error", JOptionPane.ERROR_MESSAGE);
+            }
+    }
+    
+    private boolean validateSubmission(){
+        if(
+               this.title.getValue() !=  ""  && 
+                this.fullname.getText() != "" && 
+                 this.phone.getText() != "" && 
+                 this.file != null && 
+                 this.rightThumbStream != null && 
+                 this.leftThumbStream != null
+            ) {
+            return true;
+        }
+        return false;
+    }
+//    
+//    private void onSave() {
+//        while (true) {
+//            try {
+//                    String dir ="src\\\\fprints\\";
+//                    File file = new File(dir + file.toString() + ".fpt");
+//                    if (file.exists()) {
+//                        int choice = JOptionPane.showConfirmDialog(this,
+//                                String.format("File \"%1$s\" already exists.\nDo you want to replace it?", file.toString()),
+//                                "Fingerprint saving", 
+//                                JOptionPane.YES_NO_CANCEL_OPTION);
+//                        if (choice == JOptionPane.NO_OPTION)
+//                                continue;
+//                        else if (choice == JOptionPane.CANCEL_OPTION)
+//                                break;
+//                    }
+//                    FileOutputStream stream = new FileOutputStream(file);
+//                    stream.write(getTemplate().serialize());
+//                    stream.close();
+//            } catch (Exception ex) {
+//                    JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Fingerprint saving", JOptionPane.ERROR_MESSAGE);
+//            }
+//        }
+//    }
     
 }

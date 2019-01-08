@@ -7,7 +7,10 @@ package model;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Properties;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class MysqlConnect {
     // init database constants
@@ -45,6 +48,11 @@ public class MysqlConnect {
 //                connection = DriverManager.getConnection(DATABASE_URL, "root", "jboy01");
                 connection = DriverManager.getConnection(DATABASE_URL, getProperties());
             } catch (ClassNotFoundException | SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Database Error");
+                alert.setContentText("Unable to connect to the database, Pls contact system admin.");
+                Optional<ButtonType> result = alert.showAndWait();
+                
                 System.out.println(e.getMessage());
                 e.printStackTrace();
             }
