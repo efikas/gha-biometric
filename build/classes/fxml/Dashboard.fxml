@@ -11,10 +11,11 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="565.0" prefWidth="824.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="565.0" prefWidth="824.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.DashboardController">
    <children>
       <ScrollPane layoutY="29.0" prefHeight="565.0" prefWidth="824.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
          <content>
@@ -29,31 +30,45 @@
                <right>
                   <VBox alignment="TOP_CENTER" prefHeight="418.0" prefWidth="814.0" BorderPane.alignment="CENTER">
                      <children>
-                        <ImageView blendMode="DARKEN" fitHeight="150.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../assets/images/fingerprint.gif" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
+                        <HBox alignment="CENTER" fx:id="hBox" prefHeight="100.0" prefWidth="200.0" spacing="20">
+                           <children>
+                              <ImageView fx:id="fPrintImage" blendMode="DARKEN" fitHeight="150.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/images/default_print.jpg" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </ImageView>
+                              <VBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="280.0">
+                                 <children>
+                                    <Label fx:id="log" prefHeight="33.0" prefWidth="270.0" text="Label" />
+                                    <Label fx:id="status" prefHeight="35.0" prefWidth="273.0" text="Label" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
                         <JFXScrollPane>
                            <children>
-                              <ImageView fitHeight="150.0" fitWidth="142.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/images/user.jpg" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="150.0" fitWidth="142.0" layoutX="346.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/images/user.jpg" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="150.0" fitWidth="142.0" layoutX="346.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/images/user.jpg" />
-                                 </image>
-                              </ImageView>
+                               <HBox fx:id="wardHbox">
+                                   <children>
+                                       <ImageView fitHeight="150.0" fitWidth="142.0" layoutX="46.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                               <Image url="@../assets/images/user.jpg" />
+                                            </image>
+                                         </ImageView>
+                                         <ImageView fitHeight="150.0" fitWidth="142.0" layoutX="246.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                               <Image url="@../assets/images/user.jpg" />
+                                            </image>
+                                         </ImageView>
+                                         <ImageView fitHeight="150.0" fitWidth="142.0" layoutX="446.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                               <Image url="@../assets/images/user.jpg" />
+                                            </image>
+                                         </ImageView>
+                                   </children>
+                               </HBox>
                            </children>
                         </JFXScrollPane>
                      </children>

@@ -372,6 +372,7 @@ public class ParentController extends JFrame implements Initializable{
             try {
                 if(thumbToggle == 1 && template != null){
                     leftThumbStream = template.serialize();
+                    leftThumbImage.setImage(new Image("file:src/assets/images/success_print.png"));
 //                            new FileOutputStream(file);
 //                    leftThumbStream.write(template.serialize());
 //                    leftThumbStream.close();
@@ -381,11 +382,15 @@ public class ParentController extends JFrame implements Initializable{
                 
                 if(thumbToggle == 2 && template != null){
                     rightThumbStream = template.serialize();
+                    rightThumbImage.setImage(new Image("file:src/assets/images/success_print.png"));
 //                            new FileOutputStream(file);
 //                    rightThumbStream.write(template.serialize());
 //                    rightThumbStream.close();
                     
                     //confirm right thumb scan status
+                }
+                else {
+                    
                 }
             } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Fingerprint serialization error", JOptionPane.ERROR_MESSAGE);

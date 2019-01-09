@@ -69,6 +69,26 @@ public class Model {
        this.mysqlConnent.disconnect(this.connect);        
     }
     
+     public ResultSet fetchAllParentRecord() throws FileNotFoundException{
+        ResultSet rs = null;
+        this.connect = this.mysqlConnent.connect();
+        
+        try {
+            rs = connect.createStatement().executeQuery("SELECT * FROM gha_record.parent");
+//            if(rs.next()){
+//                
+//                rs.close();
+//            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //disconnect
+//       this.mysqlConnent.disconnect(this.connect); 
+       return rs;
+    }
+     
     public void addParentRecord(Map<String, Object> record) throws FileNotFoundException{
         this.connect = this.mysqlConnent.connect();
         

@@ -77,7 +77,7 @@
                      <children>
                         <ImageView fx:id="rightThumbImage" blendMode="DARKEN" fitHeight="150.0" fitWidth="159.0" layoutX="312.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../assets/images/fingerprint.gif" />
+                              <Image url="@../assets/images/default_print.jpg" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -85,7 +85,7 @@
                         </ImageView>
                         <ImageView fx:id="leftThumbImage" blendMode="DARKEN" fitHeight="150.0" fitWidth="159.0" layoutX="49.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../assets/images/fingerprint.gif" />
+                              <Image url="@../assets/images/default_print.jpg" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />

@@ -41,7 +41,9 @@ public class Partial {
             "Mr",
             "Mrs",
             "Sir",
-            "Mallam"
+            "Mal.",
+            "Alh.",
+            "Hajia"
         );
         
         return options;
@@ -54,9 +56,7 @@ public class Partial {
             "A",
             "B",
             "C",
-            "D",
-            "E",
-            "F"
+            "Tahfeez"
         );
         return options;
     }
