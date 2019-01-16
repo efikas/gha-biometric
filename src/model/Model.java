@@ -19,6 +19,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -181,6 +182,35 @@ public class Model {
         
         return pupilsData;
      }
+    
+      public List<Pupil> fetchAllPupils() throws Exception{
+        List pupilsList = new LinkedList();
+        
+        this.connect = this.mysqlConnent.connect();
+        
+        String query = "SELECT id, firstname, middlename, lastname, class, arm FROM gha_record.pupil";
+        preparedStatement = connect.prepareStatement(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
+         
+        int counter = 1;
+        while (resultSet.next()) {
+            Integer id = resultSet.getInt("id");
+            Integer serialNo = counter;
+            String name = resultSet.getString("firstname") + " " 
+                    + resultSet.getString("lastname") + " " + resultSet.getString("middlename");
+            Integer pupilClass = resultSet.getInt("class");
+            Integer classArm = resultSet.getInt("arm");
+            pupilsList.add(new Pupil(serialNo, name, pupilClass, classArm));
+            
+            counter++;
+        }
+       
+        //disconnect
+        //this.mysqlConnent.disconnect(this.connect); 
+        
+        return pupilsList;
+     }
+    
     
     
     

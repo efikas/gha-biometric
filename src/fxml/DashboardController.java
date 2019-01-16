@@ -25,14 +25,24 @@ import com.digitalpersona.onetouch.verification.DPFPVerificationResult;
 import enrollment.MainForm;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javax.imageio.ImageIO;
 import model.Model;
 
 /**
@@ -43,7 +53,7 @@ import model.Model;
 public class DashboardController implements Initializable {
     
     @FXML
-    private HBox wardHbox, hBox;
+    private HBox wardHbox;
     
     @FXML
     private ImageView fPrintImage;
@@ -57,29 +67,25 @@ public class DashboardController implements Initializable {
     private DPFPCapture capturer = DPFPGlobal.getCaptureFactory().createCapture();
     private DPFPVerification verificator = DPFPGlobal.getVerificationFactory().createVerification();
     private JTextField prompt = new JTextField();
-    private DPFPTemplate leftThumbTemplate;
-     private DPFPTemplate rightThumbTemplate;
-    
+    @FXML
+    private ImageView parentImage;
+    @FXML
+    private Label labelFullname;
+    @FXML
+    private Label labelPhone;
+    @FXML
+    private Label labelRelationship;
+   
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        ImageView imageView = new ImageView();
-        imageView.setImage(new Image("/assets/images/user.jpg",160,180,false,true));
-        imageView.setFitHeight(120.0);
-        imageView.setFitWidth(110.0);
-        
-        wardHbox.setSpacing(20);
-        wardHbox.setStyle("-fx-padding: 20");
-        wardHbox.getChildren().add(imageView);
-        
+        updateUI();
         //initial capturing
         init();
         start();
     } 
-    
     
 	protected void init()
 	{
@@ -129,67 +135,79 @@ public class DashboardController implements Initializable {
 	}
 
 	protected void process(DPFPSample sample){
-		// Draw fingerprint sample image.
-                fPrintImage.setImage(convertSampleToImage(sample));
-                fPrintImage.setFitHeight(120);
-                fPrintImage.setFitWidth(100);
-                hBox.setPadding(new Insets(15, 12, 15, 12));
+            updateFPImage(sample);
 
-		// Process the sample and create a feature set for the enrollment purpose.
-		DPFPFeatureSet features = extractFeatures(sample, DPFPDataPurpose.DATA_PURPOSE_VERIFICATION);
+            // Process the sample and create a feature set for the enrollment purpose.
+            DPFPFeatureSet features = extractFeatures(sample, DPFPDataPurpose.DATA_PURPOSE_VERIFICATION);
 
-		// Check quality of the sample and start verification if it's good
-		if (features != null){
-                        try {
-                            //pull data from database and compare the templates
-                            model.Model model = new Model();
-                            ResultSet rs = model.fetchAllParentRecord();
+            // Check quality of the sample and start verification if it's good
+            if (features != null){
+                try {
+                    //pull data from database and compare the templates
+                    model.Model model = new Model();
+                    ResultSet rs = model.fetchAllParentRecord();
 
-                            if(rs.next()){
-                                // Compare the feature set with our template
-                                System.out.print(rs.getString("id"));
-//                                byte[] leftThumb = (byte[])rs.getBytes("leftThumb");
-//                                byte[] rightThumb = (byte[])rs.getBytes("rightThumb");
-//                                leftThumbTemplate.deserialize(leftThumb);
-//                                rightThumbTemplate.deserialize(rightThumb);
-                                
-//                               if(verificator.verify(features, leftThumbTemplate).isVerified()){
-//                                   System.out.print(rs.getString("name"));
-////                                   rs.close();
-//                               }
-//                               else {
-//                                   if(verificator.verify(features, rightThumbTemplate).isVerified()){
-//                                        System.out.print(rs.getString("name"));
-////                                        rs.close();
-//                                    }
-//                               }
+                    if(rs.next()){
+                        // Compare the feature set with our template
+                        System.out.print(rs.getString("id"));
+                        byte[] leftThumb = (byte[])rs.getBytes("leftThumb");
+                        byte[] rightThumb = (byte[])rs.getBytes("rightThumb");
+
+                        DPFPTemplate leftThumbTemplate = DPFPGlobal.getTemplateFactory().createTemplate();
+                        DPFPTemplate rightThumbTemplate = DPFPGlobal.getTemplateFactory().createTemplate();
+                        leftThumbTemplate.deserialize(leftThumb);
+                        rightThumbTemplate.deserialize(rightThumb);
+
+                       if(verificator.verify(features, leftThumbTemplate).isVerified()){
+                           outputParentInfo(
+                                rs.getString("name"), 
+                                rs.getString("phone"),
+                                rs.getString("relationship"),
+                                rs.getBytes("image")
+                           );
+                           rs.close();
+                       }
+                       else {
+                           if(verificator.verify(features, rightThumbTemplate).isVerified()){
+                                outputParentInfo(
+                                   rs.getString("name"), 
+                                   rs.getString("phone"),
+                                   rs.getString("relationship"),
+                                   rs.getBytes("image")
+                                );
+                                rs.close();
                             }
-                        }
-                        catch(Exception ex) {
-                           Logger.getLogger("Verification").log(Level.SEVERE, null, ex);
-                        }
-//			// Compare the feature set with our template
-//			DPFPVerificationResult result = 
-//				verificator.verify(features, ((MainForm)getOwner()).getTemplate());
-//                        
-//			if (result.isVerified())
-//				makeReport("The fingerprint was VERIFIED.");
-//			else
-//				makeReport("The fingerprint was NOT VERIFIED.");
-		}
+                           else {
+                               // show error
+                           }
+                       }
+                    }
+                }
+                catch(Exception ex) {
+                   Logger.getLogger("Verification").log(Level.SEVERE, null, ex);
+//                         JOptionPane.showMessageDialog(DashboardController, ex.getLocalizedMessage(), "Fingerprint loading", JOptionPane.ERROR_MESSAGE);
+                }
+            }
 	}
-        
-        
+       
 
-	protected void start()
-	{
+	protected void start() {
 		capturer.startCapture();
 		setPrompt("Using the fingerprint reader, scan your fingerprint.");
 	}
 
-	protected void stop()
-	{
-            capturer.stopCapture();
+	protected void stop() {
+            try {
+                capturer.stopCapture();
+            }
+            catch(Exception ex){}
+	}
+        
+        public void stop2() {
+            try {
+                capturer.stopCapture();
+            }
+            catch(Exception ex){}
 	}
 
 	public void setStatus(String string) {
@@ -203,6 +221,50 @@ public class DashboardController implements Initializable {
                 @Override
                 public void run() {
                   log.setText(string);
+                }
+           });
+	}
+        
+        public void updateFPImage(DPFPSample sample) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                  // Draw fingerprint sample image.
+                    fPrintImage.setImage(convertSampleToImage(sample));
+                    fPrintImage.setFitHeight(120);
+                    fPrintImage.setFitWidth(100);
+                    wardHbox.setPadding(new Insets(15, 12, 15, 12));
+                }
+           });
+	}
+        
+        public void updateUI() {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                  //Creating a Stackpane 
+                    StackPane stackPane = new StackPane();
+                    //Setting the margin for the circle 
+            //        stackPane.setMargin(circle, new Insets(50, 50, 50, 50));       
+
+                    //Retrieving the observable list of the Stack Pane 
+                    ObservableList list = stackPane.getChildren(); 
+                    CheckBox cb1 = new CheckBox("");
+                    cb1.setSelected(true);
+
+                    // TODO
+                    ImageView imageView = new ImageView();
+                    imageView.setImage(new Image("/assets/images/user.jpg",160,180,false,true));
+                    imageView.setFitHeight(180.0);
+                    imageView.setFitWidth(160.0);
+
+                     //Adding all the nodes to the pane 
+                    stackPane.setAlignment(cb1,Pos.TOP_RIGHT);
+                    stackPane.getChildren().addAll(imageView, cb1); 
+
+                    wardHbox.setSpacing(20);
+                    wardHbox.setStyle("-fx-padding: 20");
+                    wardHbox.getChildren().add(stackPane);
                 }
            });
 	}
@@ -221,13 +283,36 @@ public class DashboardController implements Initializable {
                 Graphics2D bGr = bufferedImage.createGraphics();
                 bGr.drawImage(img, 0, 0, null);
                 bGr.dispose();
-
             }
-            
             Image image = SwingFXUtils.toFXImage(bufferedImage, null);
             
             return image;
 	}
+        
+        private void outputParentInfo(String name, String phone, String rel, byte[] imageBytes){
+            //run on JavaFX Thread
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    labelFullname.setText(name);
+                    labelPhone.setText(phone);
+                    labelRelationship.setText(rel);
+                    try {
+                        generateImage(imageBytes);
+                    } catch (IOException ex) {
+                        Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+           });
+            
+        }
+        
+        private void generateImage(byte[] imageBytes) throws IOException{
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+            BufferedImage bImage2 = ImageIO.read(bis);
+            ImageIO.write(bImage2, "jpg", new File("src/assets/gen_images/parent.jpg"));
+            parentImage.setImage(new Image("file:src/assets/gen_images/parent.jpg", 160, 180, false, false));
+        }
 
 	protected DPFPFeatureSet extractFeatures(DPFPSample sample, DPFPDataPurpose purpose)
 	{

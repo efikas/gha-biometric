@@ -20,15 +20,15 @@ public class Partial {
         ObservableList<String> options = 
         FXCollections.observableArrayList(
             "",
-            "Nur 1",
-            "Nur 2",
-            "Nur 3",
-            "Pry 1",
-            "Pry 2",
-            "Pry 3",
-            "Pry 4",
-            "Pry 5",
-            "Pry 6"
+            "NUR 1",
+            "NUR 2",
+            "NUR 3",
+            "PRY 1",
+            "PRY 2",
+            "PRY 3",
+            "PRY 4",
+            "PRY 5",
+            "PRY 6"
         );
         
         return options;
@@ -56,7 +56,7 @@ public class Partial {
             "A",
             "B",
             "C",
-            "Tahfeez"
+            "TAHFEEZ"
         );
         return options;
     }
@@ -75,5 +75,18 @@ public class Partial {
         }
         
         return true;
+    }
+    
+    public void alert(String message, String alertType){
+        
+    }
+    
+    public static String getFileExtension(File file) {
+        String name = file.getName();
+        int lastIndexOf = name.lastIndexOf(".");
+        if (lastIndexOf == -1) {
+            return ""; // empty extension
+        }
+        return name.substring(lastIndexOf);
     }
 }

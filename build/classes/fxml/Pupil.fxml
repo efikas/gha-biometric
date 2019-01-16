@@ -24,6 +24,9 @@
                         <Image url="@../assets/images/user.jpg" />
                      </image>
                   </ImageView>
+                  <Button fx:id="rotateCW" layoutX="584.0" layoutY="220.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="rotate CW" />
+                  <Button fx:id="rotateACW" layoutX="690.0" layoutY="220.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="81.0" text="rorate ACW" />
+                  
                   <Button fx:id="submitBtn" layoutX="421.0" layoutY="277.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="76.0" text="Submit" />
                   <Button layoutX="124.0" layoutY="277.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="81.0" text="Cancel" />
                   <JFXComboBox fx:id="pupilClass" labelFloat="true" layoutX="132.0" layoutY="173.0" prefHeight="26.0" prefWidth="195.0" promptText="Class" />

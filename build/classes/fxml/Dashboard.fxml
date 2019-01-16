@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXScrollPane?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -17,40 +15,65 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="565.0" prefWidth="824.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.DashboardController">
    <children>
-      <ScrollPane layoutY="29.0" prefHeight="565.0" prefWidth="824.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+      <ScrollPane prefHeight="565.0" prefWidth="824.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
             <BorderPane prefHeight="522.0" prefWidth="778.0">
-               <top>
-                  <Label prefHeight="91.0" prefWidth="506.0" text="GREAT HEIGHTS ACADEMY" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="26.0" />
-                     </font>
-                  </Label>
-               </top>
                <right>
-                  <VBox alignment="TOP_CENTER" prefHeight="418.0" prefWidth="814.0" BorderPane.alignment="CENTER">
+                  <VBox alignment="TOP_CENTER" prefWidth="814.0" BorderPane.alignment="CENTER">
                      <children>
-                        <HBox alignment="CENTER" fx:id="hBox" prefHeight="100.0" prefWidth="200.0" spacing="20">
+                        <HBox prefHeight="234.0" prefWidth="814.0">
                            <children>
-                              <ImageView fx:id="fPrintImage" blendMode="DARKEN" fitHeight="150.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/images/default_print.jpg" />
-                                 </image>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </ImageView>
-                              <VBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="280.0">
+                              <HBox alignment="CENTER" prefHeight="150.0" prefWidth="402.0">
                                  <children>
-                                    <Label fx:id="log" prefHeight="33.0" prefWidth="270.0" text="Label" />
-                                    <Label fx:id="status" prefHeight="35.0" prefWidth="273.0" text="Label" />
+                                    <ImageView fx:id="parentImage" fitHeight="150.0" fitWidth="131.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../assets/images/user.jpg" />
+                                       </image>
+                                    </ImageView>
+                                    <VBox alignment="CENTER" prefHeight="150.0" prefWidth="217.0">
+                                       <children>
+                                          <Label fx:id="labelFullname" prefHeight="38.0" prefWidth="217.0" text="Label">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
+                                          <Label fx:id="labelPhone" prefHeight="33.0" prefWidth="216.0" text="Label">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
+                                          <Label fx:id="labelRelationship" prefHeight="33.0" prefWidth="217.0" text="Label">
+                                             <font>
+                                                <Font name="System Bold Italic" size="12.0" />
+                                             </font></Label>
+                                       </children>
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </VBox>
                                  </children>
-                              </VBox>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="150.0" prefWidth="398.0">
+                                 <children>
+                                    <ImageView fx:id="fPrintImage" blendMode="DARKEN" fitHeight="140.0" fitWidth="135.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../assets/images/default_print.jpg" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ImageView>
+                                    <VBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="298.0">
+                                       <children>
+                                          <Label fx:id="log" prefHeight="49.0" prefWidth="281.0" text="Label" wrapText="true" />
+                                          <Label fx:id="status" prefHeight="35.0" prefWidth="273.0" text="Label" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
                            </children>
                         </HBox>
-                        <JFXScrollPane>
+                        <JFXScrollPane prefHeight="192.0" prefWidth="814.0">
                            <children>
-                               <HBox fx:id="wardHbox">
+                               <HBox fx:id="wardHbox" alignment="CENTER" prefHeight="199.0" prefWidth="814.0">
                                    <children>
                                        <ImageView fitHeight="150.0" fitWidth="142.0" layoutX="46.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
@@ -77,26 +100,5 @@
             </BorderPane>
          </content>
       </ScrollPane>
-      <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Add Pupil" />
-                  <MenuItem mnemonicParsing="false" text="Add Parent" />
-                  <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
    </children>
 </AnchorPane>

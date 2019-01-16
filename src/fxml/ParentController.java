@@ -55,6 +55,7 @@ import javax.swing.*;
 import model.Model;
 import partial.Partial;
 import partial.Pupil;
+import partial.Validate;
 
 /**
  *
@@ -172,18 +173,23 @@ public class ParentController extends JFrame implements Initializable{
        setTemplate(null);
        
        submitBtn.setOnAction(e->{
-           
+            Map<String, Object> data = new HashMap<String, Object>();
+            data.put("fullname", this.fullname.getText());
+            data.put("phone", this.phone.getText());
+            data.put("title", this.title.getValue());
+            data.put("image", this.file);
+            data.put("rightThumb", this.rightThumbStream);
+            data.put("leftThumb", this.leftThumbStream);
            //validate
-           if(validateSubmission()){
-                Map<String, Object> data = new HashMap<String, Object>();
+            partial.Validate validate = new Validate();
+           if(validate.validateSubmission(data)){
+               //update Map
+                data.remove("title");
+                
                 String parentName = this.title.getValue() + " " + this.fullname.getText();
-                 data.put("fullname", parentName);
-                 data.put("phone", this.phone.getText());
-                 data.put("mobile", this.mobile.getText());
-                 data.put("image", this.file);
-                 data.put("rightThumb", this.rightThumbStream);
-                 data.put("leftThumb", this.leftThumbStream);
-                 data.put("pupils", this.parendWard);
+                data.replace("fullname", parentName);
+                data.put("mobile", this.mobile.getText());
+                data.put("pupils", this.parendWard);
 //               System.out.println(this.parendWard.get(0).getName());
 
                  try {
@@ -296,7 +302,7 @@ public class ParentController extends JFrame implements Initializable{
        InputStream is;
        OutputStream os;
        Image imagex = null;
-       imageName = imageName + "photo.jpg";
+       imageName = "src/assets/gen_images/" + imageName + ".jpg";
         try {
             is = imageBlob.getBinaryStream();
             os = new FileOutputStream(new File(imageName));
@@ -320,32 +326,32 @@ public class ParentController extends JFrame implements Initializable{
     private void selectPupil(){
         pupil1Image.setOnMouseClicked(e -> {
            if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
-                this.openDialog(0, pupil1NameLabel, pupil1Image, "pupil1Image");
+                this.openDialog(0, pupil1NameLabel, pupil1Image, "pupil_1");
             }
        });
         pupil2Image.setOnMouseClicked(e -> {
            if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
-                this.openDialog(1,  pupil2NameLabel, pupil2Image, "pupil2Image");
+                this.openDialog(1,  pupil2NameLabel, pupil2Image, "pupil_2");
             }
        });
         pupil3Image.setOnMouseClicked(e -> {
            if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
-                this.openDialog(2,  pupil3NameLabel, pupil3Image, "pupil3Image");
+                this.openDialog(2,  pupil3NameLabel, pupil3Image, "pupil_3");
             }
        });
         pupil4Image.setOnMouseClicked(e -> {
            if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
-                this.openDialog(3, pupil4NameLabel, pupil4Image, "pupil4Image");
+                this.openDialog(3, pupil4NameLabel, pupil4Image, "pupil_4");
             }
        });
         pupil5Image.setOnMouseClicked(e -> {
            if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
-                this.openDialog(4, pupil5NameLabel, pupil5Image, "pupil5Image");
+                this.openDialog(4, pupil5NameLabel, pupil5Image, "pupil_5");
             }
        });
         pupil6Image.setOnMouseClicked(e -> {
            if(e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2){
-                this.openDialog(5, pupil6NameLabel, pupil6Image, "pupil6Image");
+                this.openDialog(5, pupil6NameLabel, pupil6Image, "pupil_6");
             }
        });
     }
@@ -397,19 +403,19 @@ public class ParentController extends JFrame implements Initializable{
             }
     }
     
-    private boolean validateSubmission(){
-        if(
-               this.title.getValue() !=  ""  && 
-                this.fullname.getText() != "" && 
-                 this.phone.getText() != "" && 
-                 this.file != null && 
-                 this.rightThumbStream != null && 
-                 this.leftThumbStream != null
-            ) {
-            return true;
-        }
-        return false;
-    }
+//    private boolean validateSubmission(){
+//        if(
+//               this.title.getValue() !=  ""  && 
+//                this.fullname.getText() != "" && 
+//                 this.phone.getText() != "" && 
+//                 this.file != null && 
+//                 this.rightThumbStream != null && 
+//                 this.leftThumbStream != null
+//            ) {
+//            return true;
+//        }
+//        return false;
+//    }
 //    
 //    private void onSave() {
 //        while (true) {

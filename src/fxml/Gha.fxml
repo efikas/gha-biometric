@@ -8,13 +8,15 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.GhaController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.GhaController">
    <right>
       <JFXHamburger fx:id="hamburger" alignment="TOP_RIGHT" prefHeight="30.0" prefWidth="50.0" BorderPane.alignment="CENTER">
          <padding>
@@ -26,10 +28,15 @@
       </JFXHamburger>
    </right>
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="563.0" prefWidth="903.0" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER" prefHeight="72.0" prefWidth="950.0">
                <children>
+                  <ImageView fitHeight="62.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/images/logo.png" />
+                     </image>
+                  </ImageView>
                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="963.0" text="GREAT HEIGHTS ACADEMY">
                      <font>
                         <Font name="System Bold" size="43.0" />
@@ -37,9 +44,9 @@
                   </Label>
                </children>
             </HBox>
-            <ScrollPane prefHeight="556.0" prefWidth="903.0">
+            <ScrollPane prefHeight="502.0" prefWidth="903.0">
                <content>
-                  <AnchorPane fx:id="containerPane" prefHeight="562.0" prefWidth="874.0" />
+                  <AnchorPane fx:id="containerPane" prefHeight="540.0" prefWidth="874.0" />
                </content>
             </ScrollPane>
          </children>
@@ -53,7 +60,22 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+                  <MenuItem fx:id="menuDashboard" mnemonicParsing="false" text="Dashboard" />
+                  <Menu mnemonicParsing="false" text="Parent">
+                    <items>
+                        <MenuItem fx:id="menuAddParent" mnemonicParsing="false" text="Add Parent" />
+                      <MenuItem fx:id="menuParentList" mnemonicParsing="false" text="Parent List" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Pupil">
+                    <items>
+                        <MenuItem fx:id="menuAddPupil" mnemonicParsing="false" text="Add Pupil" />
+                      <MenuItem fx:id="menuPupilsList" mnemonicParsing="false" text="Pupils List" />
+                    </items>
+                  </Menu>
+                  <MenuItem fx:id="menuReport" mnemonicParsing="false" text="Report" />
+                  <MenuItem fx:id="menuHelp" mnemonicParsing="false" text="Help" />
+              <MenuItem fx:id="menuClose" mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">

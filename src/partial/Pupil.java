@@ -18,11 +18,30 @@ public class Pupil {
 
     private SimpleIntegerProperty id;
     private SimpleStringProperty name;
+    private SimpleIntegerProperty pupilClass;
+    private SimpleIntegerProperty classArm;
     private SimpleObjectProperty streamImage;
+    Partial partial = new Partial();
 
     public Pupil(int id, String name, Object streamImage)  {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
+        this.streamImage = new SimpleObjectProperty(streamImage);
+    }
+    
+    public Pupil(int id, String name, int pupilClass, int classArm)  {
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.pupilClass = new SimpleIntegerProperty(pupilClass);
+        this.classArm = new SimpleIntegerProperty(classArm);
+    }
+  
+    
+    public Pupil(int id, String name, int pupilClass, int classArm, Object streamImage)  {
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.pupilClass = new SimpleIntegerProperty(pupilClass);
+        this.classArm = new SimpleIntegerProperty(classArm);
         this.streamImage = new SimpleObjectProperty(streamImage);
     }
 
@@ -38,8 +57,32 @@ public class Pupil {
         return name.get();
     }
 
-    public void setName(String nme) {
-        this.name.set(nme);
+    public void setName(String name) {
+        this.name.set(name);
+    }
+    
+    public int getPupilClass() {
+        return pupilClass.get();
+    }
+    
+    public String getPupilClassName() {
+        return partial.populateClass().get(pupilClass.get());
+    }
+
+    public void setPupilClass(int pupilClass) {
+        this.pupilClass.set(pupilClass);
+    }
+    
+    public int getClassArm() {
+        return classArm.get();
+    }
+    
+    public String getPupilClassArmName() {
+        return partial.populateClassArm().get(classArm.get());
+    }
+
+    public void setClassArm(int classArm) {
+        this.classArm.set(classArm);
     }
 
     public Object getImage() {
