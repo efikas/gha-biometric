@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Login">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.LoginController">
    <top>
       <HBox alignment="CENTER" prefHeight="181.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -44,7 +44,7 @@
             </HBox>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="58.0" prefHeight="43.0" prefWidth="600.0">
                <children>
-                  <Button fx:id="loginBtn" mnemonicParsing="false" onAction="#onLogin" onMouseClicked="#onLogin" prefHeight="26.0" prefWidth="87.0" text="Login">
+                  <Button fx:id="loginBtn" mnemonicParsing="false" onAction="#onLogin" prefHeight="26.0" prefWidth="87.0" text="Login">
                      <HBox.margin>
                         <Insets top="30.0" />
                      </HBox.margin></Button>

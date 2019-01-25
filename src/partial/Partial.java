@@ -7,8 +7,14 @@ package partial;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Optional;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 /**
  *
@@ -77,8 +83,49 @@ public class Partial {
         return true;
     }
     
-    public void alert(String message, String alertType){
-        
+    public static void alert(String message){
+            showAlert(message);
+    }
+    
+    public static void alert(String message, String title){
+        showFullAlert(AlertType.INFORMATION, "", message);
+    }
+    
+    public static void alert(String message, String title, AlertType alertType ){
+        if(alertType != null){
+            if(title != null) {
+                showFullAlert(alertType, title, message);
+            }
+            else {
+                showFullAlert(AlertType.INFORMATION, "", message);
+            }
+        }
+        else {
+            showAlert(message);
+        }
+    }
+    
+    private static void showAlert(String message) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+              Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle(message);
+                Optional<ButtonType> result = alert.showAndWait();
+            }
+       });
+    }
+    
+    private static void showFullAlert(AlertType alertType, String title, String message) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+               Alert alert = new Alert(alertType);
+                alert.setTitle(title);
+                alert.setContentText(message);
+                Optional<ButtonType> result = alert.showAndWait();
+            }
+       });
     }
     
     public static String getFileExtension(File file) {

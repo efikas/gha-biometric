@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.MysqlConnect;
+import partial.Partial;
 import partial.Pupil;
 
 /**
@@ -41,6 +42,46 @@ public class Model {
     
     model.MysqlConnect mysqlConnent = new MysqlConnect();
     
+     public void Register(String user, byte[] pass) throws FileNotFoundException{
+        this.connect = this.mysqlConnent.connect();
+        
+        try {
+            // PreparedStatements can use variables and are more efficient
+            preparedStatement = connect.prepareStatement("insert into gha_record.users values (default, ?, ?)");
+            
+            preparedStatement.setString(1, (String) user);
+            preparedStatement.setBytes(2, pass);
+            preparedStatement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+     }
+     
+     public boolean Login(String user, byte[] pass) throws SQLException{
+        this.connect = this.mysqlConnent.connect();
+        
+        String query = "SELECT * FROM gha_record.users WHERE username = ? AND password = ?";
+        preparedStatement = connect.prepareStatement(query);
+        preparedStatement.setString(1, user);
+        preparedStatement.setBytes(2, pass);
+        
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+          return true;
+        }
+        
+        return false;
+     }
+     
+     public void ChangePass(Map<String, Object> record) throws FileNotFoundException{
+        this.connect = this.mysqlConnent.connect();
+        
+        
+        
+     }
    
     public void addPupilRecord(Map<String, Object> record) throws FileNotFoundException{
         this.connect = this.mysqlConnent.connect();
@@ -76,17 +117,13 @@ public class Model {
         
         try {
             rs = connect.createStatement().executeQuery("SELECT * FROM gha_record.parent");
-//            if(rs.next()){
-//                
-//                rs.close();
-//            }
             
         } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         //disconnect
-//       this.mysqlConnent.disconnect(this.connect); 
+       // this.mysqlConnent.disconnect(this.connect); 
        return rs;
     }
      
@@ -178,15 +215,60 @@ public class Model {
         pupilsData.put("pupilsNames", pupilsNames);
         
         //disconnect
-        //this.mysqlConnent.disconnect(this.connect); 
+        this.mysqlConnent.disconnect(this.connect); 
         
         return pupilsData;
      }
     
-      public List<Pupil> fetchAllPupils() throws Exception{
-        List pupilsList = new LinkedList();
+     public  List<Map<String, Object>> getParentWards(int parentId) throws Exception{
+        List<Map<String, Object>> pupilsInfo = new ArrayList<>();
+        Partial partial = new Partial();
         
         this.connect = this.mysqlConnent.connect();
+        
+        String query = "SELECT * FROM gha_record.parent_pupil WHERE parentId = ?";
+        preparedStatement = connect.prepareStatement(query);
+        preparedStatement.setInt(1, parentId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        
+        while (resultSet.next()) {
+            //fetch the student information
+            String wardQuery = "SELECT * FROM gha_record.pupil WHERE id = ?";
+            preparedStatement = connect.prepareStatement(wardQuery);
+            preparedStatement.setInt(1, resultSet.getInt("pupilId"));
+            ResultSet wardResultSet = preparedStatement.executeQuery();
+            
+             while (wardResultSet.next()) {
+                 Map<String, Object> data = new HashMap<>();
+            
+                int id = wardResultSet.getInt("id");
+                String fullname = wardResultSet.getString("firstname") + " " +
+                                wardResultSet.getString("middlename") + " " +
+                                wardResultSet.getString("lastname");
+                String pupilClass = partial.populateClass().get(wardResultSet.getInt("class")) + " " 
+                    + partial.populateClassArm().get(wardResultSet.getInt("arm"));
+//                int pupilClass = wardResultSet.getInt("class");
+//                int classArm = wardResultSet.getInt("arm");
+                byte[] image = wardResultSet.getBytes("image");
+
+                data.put("id", id);
+                data.put("fullname", fullname);
+                data.put("pupilClass", pupilClass);
+//                data.put("arm", classArm);
+                data.put("image", image);
+                pupilsInfo.add(data);
+            }
+        }
+        //disconnect
+        this.mysqlConnent.disconnect(this.connect); 
+        
+        return pupilsInfo;
+     }
+    
+      public List<Pupil> fetchAllPupils() throws Exception{
+        this.connect = this.mysqlConnent.connect();
+        
+         List pupilsList = new LinkedList();
         
         String query = "SELECT id, firstname, middlename, lastname, class, arm FROM gha_record.pupil";
         preparedStatement = connect.prepareStatement(query);
@@ -206,31 +288,13 @@ public class Model {
         }
        
         //disconnect
-        //this.mysqlConnent.disconnect(this.connect); 
+        this.mysqlConnent.disconnect(this.connect); 
         
         return pupilsList;
      }
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     private void createTables() throws Exception{
         
