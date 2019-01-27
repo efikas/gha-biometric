@@ -79,7 +79,7 @@ public class LoginController implements Initializable{
             
             if(model.Login(userText.getText(), hash)){
                 //
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Gha.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
                 

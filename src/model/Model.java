@@ -28,7 +28,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.MysqlConnect;
 import partial.Partial;
-import partial.Pupil;
+import model.models.Pupil;
 
 /**
  *
@@ -215,7 +215,7 @@ public class Model {
         pupilsData.put("pupilsNames", pupilsNames);
         
         //disconnect
-        this.mysqlConnent.disconnect(this.connect); 
+//        this.mysqlConnent.disconnect(this.connect); 
         
         return pupilsData;
      }

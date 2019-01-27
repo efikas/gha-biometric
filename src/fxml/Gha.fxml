@@ -22,7 +22,7 @@
    <center>
       <VBox prefHeight="563.0" prefWidth="903.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" prefHeight="72.0" prefWidth="950.0">
+            <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="101.0" prefWidth="953.0">
                <children>
                   <ImageView fitHeight="62.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -35,6 +35,9 @@
                      </font>
                   </Label>
                </children>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
             </HBox>
             <StackPane>
                <children>

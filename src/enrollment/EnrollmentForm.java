@@ -4,7 +4,7 @@ import com.digitalpersona.onetouch.*;
 import com.digitalpersona.onetouch.processing.*;
 import java.awt.*;
 import javax.swing.JOptionPane;
-import fxml.ParentController;
+import fxml.parent.ParentController;
 
 public class EnrollmentForm extends CaptureForm
 {

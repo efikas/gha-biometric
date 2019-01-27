@@ -8,6 +8,7 @@ import com.digitalpersona.onetouch.*;
 import com.digitalpersona.onetouch.capture.*;
 import com.digitalpersona.onetouch.capture.event.*;
 import com.digitalpersona.onetouch.processing.*;
+import javafx.application.Platform;
 
 
 public class CaptureForm
@@ -144,8 +145,13 @@ public class CaptureForm
 
 	protected void start()
 	{
-		capturer.startCapture();
-		setPrompt("Using the fingerprint reader, scan your fingerprint.");
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                   capturer.startCapture();
+                    setPrompt("Using the fingerprint reader, scan your fingerprint.");
+                }
+           });
 	}
 
 	protected void stop()
