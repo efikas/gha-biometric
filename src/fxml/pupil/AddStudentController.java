@@ -34,7 +34,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import model.Model;
+import model.pupil.PupilModel;
 import model.models.Pupil;
 import partial.Partial;
 
@@ -59,7 +59,7 @@ public class AddStudentController implements Initializable{
     
     private ObservableList<Pupil> appMainObservableList;
     Partial partial = new Partial();
-    model.Model model = new Model();
+    PupilModel model = new PupilModel();
     ObservableList<String> pupilNames;
     List<Map<String, Object>> pupilsInfo;
     
@@ -142,8 +142,6 @@ public class AddStudentController implements Initializable{
         pupilFullname.valueProperty().addListener(new ChangeListener<String>() {
             @Override public void changed(ObservableValue observable, String oldValue, String newValue) {
                 int index = pupilFullname.getSelectionModel().getSelectedIndex();
-                //System.out.println("pupilnamelist = " + index);
-                //System.out.println("pupilInfolist = " + pupilsInfo.size());
                  try {
                      if(index != 0){
                          pupilId = getPupilId(index - 1, pupilsInfo);

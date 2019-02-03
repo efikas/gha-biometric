@@ -34,6 +34,11 @@
                         <Font name="System Bold" size="43.0" />
                      </font>
                   </Label>
+                  <Label alignment="CENTER" fx:id="userLabel" contentDisplay="CENTER" prefHeight="74.0" prefWidth="263.0" text="GHA/1/246">
+                     <font>
+                        <Font name="System" size="20.0" />
+                     </font>
+                  </Label>
                </children>
                <VBox.margin>
                   <Insets top="30.0" />
@@ -157,6 +162,12 @@
                     <items>
                         <MenuItem fx:id="menuAddPupil" mnemonicParsing="false" text="Add Pupil" />
                       <MenuItem fx:id="menuPupilsList" mnemonicParsing="false" text="Pupils List" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" fx:id="menuUser" text="User">
+                    <items>
+                        <MenuItem fx:id="menuAddUser" mnemonicParsing="false" text="Add User" />
+                      <MenuItem fx:id="menuPassRecovery" mnemonicParsing="false" text="Password Recovery" />
                     </items>
                   </Menu>
                   <MenuItem fx:id="menuReport" mnemonicParsing="false" text="Report" />

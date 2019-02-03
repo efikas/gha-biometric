@@ -46,16 +46,25 @@ import java.util.Map;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -64,9 +73,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
-import model.Model;
+import model.parent.ParentModel;
+import model.pupil.PupilModel;
+import partial.AlertBox;
 import partial.Partial;
 
 
@@ -116,10 +129,34 @@ public class GhaController implements Initializable {
     
     private DPFPCapture capturer = DPFPGlobal.getCaptureFactory().createCapture();
     private DPFPVerification verificator = DPFPGlobal.getVerificationFactory().createVerification();
+    @FXML
+    private MenuItem menuAddUser;
+    @FXML
+    private MenuItem menuPassRecovery;
+    @FXML
+    private JFXDrawer menuDrawer;
+    @FXML
+    private Label userLabel;
+    @FXML
+    private Button btnSubmit;
+    
+    private ContextMenu contextMenu;
+    private  MenuItem logOut;
+    private  MenuItem updatePass;
+    private int authLevel;
+    @FXML
+    private Menu menuUser;
+    
+    ParentModel parentModel = new ParentModel();
+    PupilModel pupilModel = new PupilModel();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         containerPanel = containerPane;
+        contextMenu = new ContextMenu();
+        logOut = new MenuItem("LogOut");
+        updatePass = new MenuItem("Change Password");
+        contextMenu.getItems().addAll(updatePass, logOut);
         
         //Load menu actions
         menu();
@@ -190,8 +227,7 @@ public class GhaController implements Initializable {
         if (features != null){
             try {
                 //pull data from database and compare the templates
-                model.Model model = new Model();
-                ResultSet rs = model.fetchAllParentRecord();
+                ResultSet rs = parentModel.fetchAllParentRecord();
 
                 if(rs.next()){
                     // Compare the feature set with our template
@@ -210,7 +246,7 @@ public class GhaController implements Initializable {
                             rs.getString("relationship"),
                             rs.getBytes("image")
                        );
-                       showWards(model.getParentWards(rs.getInt("id")));
+                       showWards(pupilModel.getParentWards(rs.getInt("id")));
                        rs.close();
                    }
                    else {
@@ -221,7 +257,7 @@ public class GhaController implements Initializable {
                                rs.getString("relationship"),
                                rs.getBytes("image")
                             );
-                            showWards(model.getParentWards(rs.getInt("id")));
+                            showWards(pupilModel.getParentWards(rs.getInt("id")));
                             rs.close();
                         }
                        else {
@@ -235,7 +271,7 @@ public class GhaController implements Initializable {
                             rs.close();
                             
                             clearWardHBox();
-                            Partial.alert("User Record not available!.");
+                            AlertBox.alert("User Record not available!.");
                        }
                    }
                 }
@@ -460,7 +496,7 @@ public class GhaController implements Initializable {
           menuAddPupil. setOnAction((e)->{
               try {
                   stopScanner();
-                  page = FXMLLoader.load(getClass().getResource("/fxml/Pupil.fxml"));
+                  page = FXMLLoader.load(getClass().getResource("/fxml/pupil/Pupil.fxml"));
                   containerPanel.getChildren().setAll(page);
               } catch (IOException ex) {
                   Logger.getLogger(GhaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -470,7 +506,7 @@ public class GhaController implements Initializable {
           menuAddParent.setOnAction((e)->{
               try {
                   stopScanner();
-                  page = FXMLLoader.load(getClass().getResource("/fxml/Parent.fxml"));
+                  page = FXMLLoader.load(getClass().getResource("/fxml/parent/Parent.fxml"));
                  containerPanel.getChildren().setAll(page);
               } catch (IOException ex) {
                   Logger.getLogger(GhaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -485,7 +521,7 @@ public class GhaController implements Initializable {
           menuHelp.setOnAction((e)->{
               try {
                   stopScanner();
-                  page = FXMLLoader.load(getClass().getResource("/fxml/Pupil.fxml"));
+                  page = FXMLLoader.load(getClass().getResource("/fxml/pupil/Pupil.fxml"));
                   containerPanel.getChildren().setAll(page);
               } catch (IOException ex) {
                   Logger.getLogger(GhaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -495,7 +531,7 @@ public class GhaController implements Initializable {
           menuParentList.setOnAction((e)->{
               try {
                   stopScanner();
-                  page = FXMLLoader.load(getClass().getResource("/fxml/ParentList.fxml"));
+                  page = FXMLLoader.load(getClass().getResource("/fxml/parent/ParentList.fxml"));
                   containerPanel.getChildren().setAll(page);
               } catch (IOException ex) {
                   Logger.getLogger(GhaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -505,7 +541,7 @@ public class GhaController implements Initializable {
           menuPupilsList.setOnAction((e)->{
               try {
                   stopScanner();
-                  page = FXMLLoader.load(getClass().getResource("/fxml/PupilsList.fxml"));
+                  page = FXMLLoader.load(getClass().getResource("/fxml/pupil/PupilsList.fxml"));
                   containerPanel.getChildren().setAll(page);
               } catch (IOException ex) {
                   Logger.getLogger(GhaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -515,7 +551,7 @@ public class GhaController implements Initializable {
           menuReport.setOnAction((e)->{
               try {
                   stopScanner();
-                  page = FXMLLoader.load(getClass().getResource("/fxml/Pupil.fxml"));
+                  page = FXMLLoader.load(getClass().getResource("/fxml/pupil/Pupil.fxml"));
                   containerPanel.getChildren().setAll(page);
               } catch (IOException ex) {
                   Logger.getLogger(GhaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -525,13 +561,104 @@ public class GhaController implements Initializable {
           menuClose.setOnAction((e)->{
               try {
                   stopScanner();
-                  page = FXMLLoader.load(getClass().getResource("/fxml/Pupil.fxml"));
+                  page = FXMLLoader.load(getClass().getResource("/fxml/pupil/Pupil.fxml"));
                   containerPanel.getChildren().setAll(page);
               } catch (IOException ex) {
                   Logger.getLogger(GhaController.class.getName()).log(Level.SEVERE, null, ex);
               }
           });
+          
+          menuAddUser.setOnAction((e)->{
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/auth/Register.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root, 450, 400);
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);
+                stage.showAndWait();
+            
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+          });
+          
+          menuPassRecovery.setOnAction((e)->{
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/auth/ForgetPass.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root, 450, 400);
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);
+                stage.showAndWait();
+            
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+          });
+          
+          updatePass.setOnAction((e)->{
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/auth/ChangePass.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root, 450, 400);
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);
+                stage.showAndWait();
+            
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+          });
+          
+//          userLabel.setOnMouseClicked((Event e)-> {
+//              if(e.getSource().equals(MouseButton.SECONDARY)){
+//                  contextMenu.show(pane, e.getTarget, e.getScreenY());
+//              }
+//                
+//          });
+          
+          userLabel.setOnMousePressed(new EventHandler<MouseEvent>() {
+                // create context menu and menu items as above
+              
+                @Override
+                public void handle(MouseEvent event) {
+                    if (event.isSecondaryButtonDown()) {
+                        userLabel.setContextMenu(contextMenu);
+                    }
+                }
+            });
+          
+          logOut.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/auth/Login.fxml"));
+                        Parent root = loader.load();
+                        Scene scene = new Scene(root);
+                        
+                        Stage primaryStage = (Stage) ((Node) btnSubmit).getScene().getWindow();
+                        primaryStage.setTitle("Login");
+                        primaryStage.setScene(scene);
+                        primaryStage.show();
+                    } catch (IOException ex) {
+                        Logger.getLogger(GhaController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
     }
+    
+    public void setAuth(String user, int authLevel){
+        userLabel.setText(user);
+        this.authLevel = authLevel;
+        
+        if(authLevel != 1){
+           menuUser.setVisible(false);
+        }
+    }
+
       
     
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="319.0" prefWidth="516.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.auth.ForgetPassController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="72.0" prefWidth="329.0" text="Change Password">
+               <font>
+                  <Font name="Lucida Calligraphy Italic" size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <VBox prefHeight="182.0" prefWidth="516.0">
+         <children>
+            <JFXComboBox labelFloat="true" prefHeight="25.0" prefWidth="473.0" promptText="Fullname">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </JFXComboBox>
+            <JFXTextField editable="false" labelFloat="true" promptText="Username">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXPasswordField labelFloat="true" promptText="Password">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </JFXPasswordField>
+            <JFXPasswordField labelFloat="true" promptText="Re-Password">
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </JFXPasswordField>
+         </children>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
+      </VBox>
+      <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="134.0" text="Submit" />
+   </children>
+</VBox>

@@ -49,14 +49,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.swing.*;
-import model.Model;
 import partial.Partial;
 import model.models.Pupil;
+import model.parent.ParentModel;
 import partial.Validate;
 
 /**
@@ -82,7 +81,7 @@ public class ParentController extends JFrame implements Initializable{
     private DPFPTemplate template;
     
     Map<String, Integer> selectedPupils = new HashMap<String, Integer>();
-    model.Model model = new Model();
+   ParentModel model = new ParentModel();
     
     // List of object of pupil id and fullname base on class selected
     private List<Map<String, Integer>> pupil1FullList, pupil6FullList = new ArrayList<Map<String, Integer>>();

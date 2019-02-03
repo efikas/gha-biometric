@@ -83,51 +83,6 @@ public class Partial {
         return true;
     }
     
-    public static void alert(String message){
-            showAlert(message);
-    }
-    
-    public static void alert(String message, String title){
-        showFullAlert(AlertType.INFORMATION, "", message);
-    }
-    
-    public static void alert(String message, String title, AlertType alertType ){
-        if(alertType != null){
-            if(title != null) {
-                showFullAlert(alertType, title, message);
-            }
-            else {
-                showFullAlert(AlertType.INFORMATION, "", message);
-            }
-        }
-        else {
-            showAlert(message);
-        }
-    }
-    
-    private static void showAlert(String message) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-              Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle(message);
-                Optional<ButtonType> result = alert.showAndWait();
-            }
-       });
-    }
-    
-    private static void showFullAlert(AlertType alertType, String title, String message) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-               Alert alert = new Alert(alertType);
-                alert.setTitle(title);
-                alert.setContentText(message);
-                Optional<ButtonType> result = alert.showAndWait();
-            }
-       });
-    }
-    
     public static String getFileExtension(File file) {
         String name = file.getName();
         int lastIndexOf = name.lastIndexOf(".");

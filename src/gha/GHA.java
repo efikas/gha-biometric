@@ -25,6 +25,7 @@ public class GHA extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Gha.fxml"));
+//         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/auth/Login.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
     

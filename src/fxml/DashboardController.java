@@ -41,7 +41,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javax.imageio.ImageIO;
-import model.Model;
+import model.parent.ParentModel;
 
 /**
  * FXML Controller class
@@ -142,7 +142,7 @@ public class DashboardController implements Initializable {
         if (features != null){
             try {
                 //pull data from database and compare the templates
-                model.Model model = new Model();
+                ParentModel model = new ParentModel();
                 ResultSet rs = model.fetchAllParentRecord();
 
                 if(rs.next()){

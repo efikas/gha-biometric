@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1043.0" prefWidth="863.0" stylesheets="@../styles/menu.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.ParentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1043.0" prefWidth="863.0" stylesheets="@../styles/menu.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.parent.ParentController">
    <children>
       <BorderPane prefHeight="1043.0" prefWidth="903.0">
          <center>

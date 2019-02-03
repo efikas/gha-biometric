@@ -6,7 +6,9 @@
 package fxml.pupil;
 
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import fxml.GhaController;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -24,8 +26,10 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -39,8 +43,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
-import model.Model;
+import model.pupil.PupilModel;
 import org.imgscalr.Scalr;
+import partial.AlertBox;
+import partial.ImageProcessor;
 import partial.Partial;
 import partial.Validate;
 import partial.ImageResizer;
@@ -68,6 +74,8 @@ public class PupilController implements Initializable{
     @FXML
     private JFXTextField pupilLastName;
     @FXML
+    private JFXTextArea pupilComment;
+    @FXML
     private Button submitBtn;
     @FXML
     private JFXComboBox<String> pupilClass;
@@ -79,6 +87,10 @@ public class PupilController implements Initializable{
     private Button rotateACW;
     
     String pupilImagemageURI = "src/assets/gen_images/pupil.jpg";
+    PupilModel model = new PupilModel();
+    
+    private boolean updatePupil = false;
+    private int updatePupilId = 0;
    
 
     @Override
@@ -121,12 +133,23 @@ public class PupilController implements Initializable{
         });
         
         submitBtn.setOnAction((e)->{
-            Map<String, Object> data = new HashMap<String, Object>();
+             if(updatePupil){
+                 updateStudent();
+             }
+             else {
+                 addStudent();
+             }
+        });
+    }
+    
+    private void addStudent(){
+        Map<String, Object> data = new HashMap<String, Object>();
             data.put("firstName", this.pupilFirstName.getText().trim().toUpperCase());
             data.put("lastName", this.pupilLastName.getText().trim().toUpperCase());
             data.put("class", this.pupilClass.getSelectionModel().getSelectedIndex());
             data.put("arm", this.pupilClassArm.getSelectionModel().getSelectedIndex());
             data.put("image", this.pupilImageFile);
+            data.put("comment", this.pupilComment.getText().trim());
             
             //validate
                 partial.Validate validate = new Validate();
@@ -136,29 +159,71 @@ public class PupilController implements Initializable{
                     //update Map
                     data.put("middleName", this.pupilMiddleName.getText().trim().toUpperCase());
                     try {
-                        model.Model model = new Model();
                         model.addPupilRecord(data);
 
                         // clear inputs
                         clearInputs();
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(PupilController.class.getName()).log(Level.SEVERE, null, ex);
-                        showFullAlert(AlertType.ERROR, "Form Error", "There was an error when saving the student record!");
+                        AlertBox.alert("There was an error when saving the student record!", "Form Error", AlertType.ERROR);
                         
                     }
                 
             }
             else{
-                 showFullAlert(AlertType.ERROR, "Form Error", "Make Sure You fill the form correctly!");
+                AlertBox.alert("Make Sure You fill the form correctly!", "Form Error", AlertType.ERROR);
              
             }
+    }
+    
+    private void updateStudent(){
+        Map<String, Object> data = new HashMap<String, Object>();
+            data.put("firstName", this.pupilFirstName.getText().trim().toUpperCase());
+            data.put("lastName", this.pupilLastName.getText().trim().toUpperCase());
+            data.put("class", this.pupilClass.getSelectionModel().getSelectedIndex());
+            data.put("arm", this.pupilClassArm.getSelectionModel().getSelectedIndex());
+            data.put("image", this.pupilImageFile);
+            data.put("comment", this.pupilComment.getText().trim());
             
-        });
+            //validate
+                partial.Validate validate = new Validate();
+            if (this.pupilClass.getSelectionModel().getSelectedIndex() > 0 &&
+                this.pupilClassArm.getSelectionModel().getSelectedIndex() > 0 &&
+                validate.validateSubmission(data)){
+                    //update Map
+                    data.put("middleName", this.pupilMiddleName.getText().trim().toUpperCase());
+                    try {
+                        int response = model.updatePupilRecord(updatePupilId, data);
+                        
+                        if(response == 1){
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/pupil/PupilsList.fxml"));
+                            Parent root = loader.load();
+                            PupilsListController pupilsListCont = loader.getController();
+                            GhaController.containerPanel.getChildren().setAll(root);
+                            pupilsListCont.loadTable();
+                        }
+                        else {
+                            AlertBox.alert("There was an error when updating the student record!", "Form Error", AlertType.ERROR);
+                        }
+
+                    }
+                    catch (FileNotFoundException ex) {
+                        Logger.getLogger(PupilController.class.getName()).log(Level.SEVERE, null, ex);
+                        AlertBox.alert("There was an error when updating the student record!", "Form Error", AlertType.ERROR);
+                    }
+                    catch (Exception ex) {
+                       Logger.getLogger(PupilsListController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+            }
+            else{
+                AlertBox.alert("Make Sure You fill the form correctly!", "Form Error", AlertType.ERROR);
+             
+            }
     }
     
     
     private void clearInputs(){
-        showFullAlert(AlertType.INFORMATION, "Upload Successfull", "Record Updated Successfully");
+        AlertBox.alert("Record Updated Successfully", "Upload Successfull", AlertType.INFORMATION);
         
         Platform.runLater(new Runnable() {
                 @Override
@@ -169,6 +234,7 @@ public class PupilController implements Initializable{
                     pupilClass.getSelectionModel().clearSelection();
                     pupilClassArm.getSelectionModel().clearSelection();
                     pupilImageFile = null;
+                    pupilComment.setText("");
                     Image img = new Image("/assets/images/user.jpg",160,180,false,true);
                     pupilImage.setImage(img);
                 }
@@ -202,7 +268,7 @@ public class PupilController implements Initializable{
                     imageResizer.resize(pupilImageFile.getPath(), resizedImage, 140, 150);
                                                           
                     if(partial.getFilesizeInKiloBytes(new File(resizedImage)) > 500){
-                        showAlert("Maximum Image size aloowed is 500kb");
+                        AlertBox.alert("Maximum Image size aloowed is 500kb");
                     }
                     else {
                         pupilImageFile = new File(resizedImage);
@@ -214,7 +280,7 @@ public class PupilController implements Initializable{
                     //Todo
                     //display exception
                     Logger.getLogger(PupilController.class.getName()).log(Level.SEVERE, null, ex);
-                    showAlert("Error Resizing Image");
+                    AlertBox.alert("Error Resizing Image");
                 }
             }
             else{
@@ -224,6 +290,46 @@ public class PupilController implements Initializable{
         }
     } 
     
+    public void loadPupilUpdate(int pupilId){
+        updatePupil = true;
+        updatePupilId = pupilId;
+        
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    loadPupil(pupilId);
+                } catch (Exception ex) {
+                    Logger.getLogger(PupilController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+       });
+        
+    }
+    
+    private void loadPupil(int pupilId) throws IOException, Exception{
+        Map<String, Object> pupilInfo = model.getPupil(pupilId);
+        
+        pupilFirstName.setText((String)pupilInfo.get("firstname"));
+        pupilMiddleName.setText((String)pupilInfo.get("middlename"));
+        pupilLastName.setText((String)pupilInfo.get("lastname"));
+        pupilComment.setText((String)pupilInfo.get("comment"));
+        
+        pupilClass.getSelectionModel().select((int)pupilInfo.get("pupil_class"));
+        pupilClassArm.getSelectionModel().select((int)pupilInfo.get("class_arm"));
+        
+        //convert the image byte to image and save in image directory
+        // the load the image as file
+        ImageProcessor imgProc = new ImageProcessor();
+        this.pupilImageFile = new File((String)imgProc.generateImageUrl(
+                (byte[])pupilInfo.get("image")
+            ));
+        
+        pupilImage.setImage(new Image("file:" + (String)imgProc.generateImageUrl(
+                (byte[])pupilInfo.get("image")
+            )));
+    }
+    
     
     private void writeImage(String imageURI) throws FileNotFoundException, IOException{
          InputStream is = new BufferedInputStream(
@@ -231,19 +337,6 @@ public class PupilController implements Initializable{
         BufferedImage image = ImageIO.read(is);
         ImageIO.write(image, "jpg", new File(pupilImagemageURI));
         pupilImageFile = new File(pupilImagemageURI);
-    }
-    
-    private void showAlert(String message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(message);
-        Optional<ButtonType> result = alert.showAndWait();
-    }
-    
-    private void showFullAlert(AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        Optional<ButtonType> result = alert.showAndWait();
     }
     
     private String getFileExtension(File file) {
